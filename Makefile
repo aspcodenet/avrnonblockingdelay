@@ -1,5 +1,5 @@
-CC=C:\avr\bin\avr-gcc
-LD=C:\avr\bin\avr-ld
+CC="C:\avr\bin\avr-gcc"
+LD="C:\avr\bin\avr-ld"
 OBJCOPY="C:\avr\bin\avr-objcopy"
 OBJDUMP="C:\avr\bin\avr-objdump"
 AVRSIZE="C:\avr\bin\avr-size"
@@ -8,7 +8,6 @@ MCU=atmega328p
 CFLAGS=-Wall -Wextra  -Wundef -pedantic \
 		-I C:\avr\avr\include \
 		-Os -std=gnu99 -DF_CPU=16000000UL -mmcu=${MCU} -DBAUD=19200
-LDFLAGS=-mmcu=$(MCU)
 PORT=\\\\.\\COM3
 BIN=avrdemo
 OUT=${BIN}.hex
@@ -22,20 +21,14 @@ else
 	OUTPUTDIR=bin/release
 endif
 
-OBJS =  $(addprefix $(OUTPUTDIR)/,$(SOURCES:.c=.o))
-
 all: $(OUTPUTDIR)  $(OUT) 
 
-$(OBJS): Makefile
-
-$(OUTPUTDIR)/%.o:%.c
-	$(CC) $(CFLAGS) -MD -o $@ -c $<
 
 %.lss: %.elf
 	$(OBJDUMP) -h -S -s $< > $@
 
-%.elf: $(OBJS)
-	$(CC) -Wl,-Map=$(@:.elf=.map) $(LDFLAGS) -o $@ $^
+%.elf: $(SOURCES)
+	$(CC) -mmcu=atmega328p -o $@ $(CFLAGS) $(LDFLAGS)  $(SOURCES)
 	$(AVRSIZE) $@
 
 
