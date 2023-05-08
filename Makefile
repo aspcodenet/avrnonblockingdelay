@@ -28,7 +28,7 @@ all: $(OUTPUTDIR)  $(OUT)
 	$(OBJDUMP) -h -S -s $< > $@
 
 %.elf: $(SOURCES)
-	$(CC) -mmcu=atmega328p -o $@ $(CFLAGS) $(LDFLAGS)  $(SOURCES)
+	$(CC) -o $@ $(CFLAGS) $(LDFLAGS)  $(SOURCES)
 	$(AVRSIZE) $@
 
 
